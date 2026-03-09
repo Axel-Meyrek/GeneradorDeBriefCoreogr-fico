@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generador de Brief Coreográfico - Define tu proyecto de baile con Fernando Morales">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Danza Perfecta | Brief Coreográfico</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/steps.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Pantalla de Bienvenida -->
+    <section id="welcome" class="screen active" aria-label="Bienvenida">
+      <div class="hero">
+        <div class="hero__bg" aria-hidden="true">
+          <div class="hero__overlay"></div>
+          <div class="hero__particles">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="hero__content">
+          <div class="hero__badge fade-in" style="--delay: 0ms">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            Coreografía profesional para tu evento
+          </div>
+
+          <h1 class="hero__title fade-in-up" style="--delay: 150ms">
+            Danza <em>Perfecta</em>
+          </h1>
+
+          <p class="hero__subtitle fade-in-up" style="--delay: 300ms">
+            Creemos juntos el baile de ese momento tan importante
+          </p>
+
+          <div class="hero__message fade-in-up" style="--delay: 500ms">
+            <div class="hero__message-header">
+              <div class="hero__avatar" aria-hidden="true">FM</div>
+              <div class="hero__author">
+                <span class="hero__author-name">Fernando Morales</span>
+                <span class="hero__author-title">Profesor y Coreógrafo Profesional</span>
+              </div>
+            </div>
+            <blockquote class="hero__quote">
+              <p>Hola, mucho gusto. Soy Fernando Morales, profesor y coreógrafo especializado en baile para bodas.</p>
+              <p>Para poder ofrecerles una propuesta clara, profesional y totalmente alineada a lo que necesitan, trabajo con un breve levantamiento de información. Esto me permite analizar su proyecto, definir el proceso correcto y entregarles una cotización real, sin sobrecostos ni sesiones innecesarias.</p>
+              <p>De manera general, la mayoría de los montajes se completan en <strong>3 a 4 sesiones</strong>, cada una de <strong>2 horas</strong>, trabajando de forma progresiva, sin presión y adaptándonos completamente a su ritmo y tiempos.</p>
+            </blockquote>
+            <div class="hero__location">
+              <svg class="hero__location-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              Reforma Sur — Salón acondicionado para clases particulares
+            </div>
+          </div>
+
+          <button id="btn-start" class="btn btn--primary hero__cta fade-in-up" style="--delay: 700ms" type="button">
+            Comenzar mi proyecto
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/>
+              <path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="hero__footer fade-in" style="--delay: 900ms">
+            Solo toma 3-5 minutos completar
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Header de progreso (visible solo durante los pasos) -->
+    <header id="progress-header" class="progress-header" aria-label="Progreso del formulario">
+      <div class="progress-header__inner">
+        <button id="btn-back-home" class="progress-header__back" type="button" aria-label="Volver al inicio">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="progress-header__info">
+          <span class="progress-header__step-label" id="progress-label">Paso 1 de 5</span>
+          <span class="progress-header__step-title" id="progress-title">Tu Evento</span>
+        </div>
+        <div class="progress-header__bar-wrapper">
+          <div class="progress-header__bar" id="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5">
+            <div class="progress-header__bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Paso 1: Información del Evento -->
+    <section id="step-1" class="screen step" data-step="1" aria-label="Información del evento">
+      <div class="step__container container">
+        <div class="step__body">
+          <h2 class="step__title">Cuéntanos sobre tu <em>evento</em></h2>
+          <p class="step__description">Esta información nos ayuda a personalizar completamente tu experiencia.</p>
+
+          <!-- Tipo de evento -->
+          <fieldset class="form-group" id="event-type-group">
+            <legend class="form-label">Tipo de evento</legend>
+            <div class="card-grid" id="event-type-grid" role="radiogroup" aria-label="Selecciona el tipo de evento">
+              <button type="button" class="card-option" data-value="Boda" role="radio" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </span>
+                <span class="card-option__label">Boda</span>
+              </button>
+              <button type="button" class="card-option" data-value="XV Años" role="radio" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </span>
+                <span class="card-option__label">XV Años</span>
+              </button>
+              <button type="button" class="card-option" data-value="Boda Destino" role="radio" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </span>
+                <span class="card-option__label">Boda Destino</span>
+              </button>
+              <button type="button" class="card-option" data-value="Aniversario" role="radio" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M8 6h8"/><rect x="4" y="8" width="16" height="14" rx="2"/><path d="M8 8v14"/><path d="M16 8v14"/></svg>
+                </span>
+                <span class="card-option__label">Aniversario</span>
+              </button>
+              <button type="button" class="card-option" data-value="Otro" role="radio" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                </span>
+                <span class="card-option__label">Otro</span>
+              </button>
+            </div>
+            <!-- Input para "Otro" -->
+            <div class="form-field form-field--hidden" id="event-type-custom-wrapper">
+              <label for="event-type-custom" class="form-label">Especifica tu evento</label>
+              <input type="text" id="event-type-custom" class="form-input" placeholder="Ej: Fiesta sorpresa, evento corporativo..." maxlength="80" autocomplete="off">
+            </div>
+          </fieldset>
+
+          <!-- Nombres -->
+          <div class="form-group">
+            <label for="event-names" class="form-label">Nombres de los protagonistas</label>
+            <input type="text" id="event-names" class="form-input" placeholder="Ej: María y Carlos" maxlength="100" autocomplete="off">
+            <span class="form-hint">Quiénes bailarán la coreografía</span>
+          </div>
+
+          <!-- Fecha -->
+          <div class="form-group">
+            <label for="event-date" class="form-label">Fecha aproximada del evento</label>
+            <input type="date" id="event-date" class="form-input" min="">
+            <span class="form-hint">Nos ayuda a planificar los tiempos de ensayo</span>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost step__btn-prev" data-action="prev">
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="button" class="btn btn--primary step__btn-next" data-action="next">
+            Siguiente
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paso 2: Selección Musical -->
+    <section id="step-2" class="screen step" data-step="2" aria-label="Selección musical">
+      <div class="step__container container">
+        <div class="step__body">
+          <h2 class="step__title">Elige tu <em>música</em></h2>
+          <p class="step__description">Selecciona hasta 3 canciones para tu coreografía o deja que Fernando sugiera.</p>
+
+          <!-- Canciones seleccionadas (tags) -->
+          <div class="song-tags" id="song-tags" aria-label="Canciones seleccionadas" aria-live="polite"></div>
+
+          <!-- Búsqueda -->
+          <div class="form-group" id="music-search-group">
+            <label for="music-search" class="form-label">Buscar canción</label>
+            <div class="search-input-wrapper">
+              <svg class="search-input__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="music-search" class="form-input search-input" placeholder="Nombre de canción o artista..." autocomplete="off">
+              <div class="search-input__spinner" id="search-spinner" aria-hidden="true"></div>
+            </div>
+            <span class="form-hint" id="search-hint">Escribe para buscar en Spotify</span>
+          </div>
+
+          <!-- Resultados -->
+          <div class="search-results" id="search-results" role="listbox" aria-label="Resultados de búsqueda"></div>
+
+          <!-- Audio oculto para previews -->
+          <audio id="preview-audio" preload="none"></audio>
+
+          <!-- Separador -->
+          <div class="music-divider">
+            <span class="music-divider__line"></span>
+            <span class="music-divider__text">o bien</span>
+            <span class="music-divider__line"></span>
+          </div>
+
+          <!-- Checkbox Fernando sugiere -->
+          <label class="checkbox-card" id="fernando-suggest-label">
+            <input type="checkbox" id="fernando-suggest" class="checkbox-card__input">
+            <span class="checkbox-card__box">
+              <svg class="checkbox-card__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="checkbox-card__content">
+              <span class="checkbox-card__title">Prefiero que Fernando sugiera la música</span>
+              <span class="checkbox-card__desc">El coreógrafo elegirá las canciones ideales para tu evento</span>
+            </span>
+          </label>
+        </div>
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost step__btn-prev" data-action="prev">
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="button" class="btn btn--primary step__btn-next" data-action="next">
+            Siguiente
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paso 3: Duración y Estilo -->
+    <section id="step-3" class="screen step" data-step="3" aria-label="Duración y estilo">
+      <div class="step__container container">
+        <div class="step__body">
+          <h2 class="step__title">Duración y <em>estilo</em></h2>
+          <p class="step__description">Define cuánto durará tu baile y qué estilo quieres transmitir.</p>
+
+          <!-- Slider de duración -->
+          <fieldset class="form-group">
+            <legend class="form-label">Duración de la coreografía</legend>
+            <div class="duration-slider" id="duration-slider">
+              <div class="duration-slider__display">
+                <span class="duration-slider__value" id="duration-value">6</span>
+                <span class="duration-slider__unit">minutos</span>
+              </div>
+              <div class="duration-slider__badge" id="duration-badge" aria-live="polite">Duración recomendada</div>
+              <div class="duration-slider__track-wrapper">
+                <input type="range" id="duration-range" class="duration-slider__input" min="3" max="10" step="1" value="6" aria-label="Duración en minutos">
+                <div class="duration-slider__ticks" aria-hidden="true">
+                  <span data-val="3">3</span>
+                  <span data-val="4">4</span>
+                  <span data-val="5">5</span>
+                  <span data-val="6">6</span>
+                  <span data-val="7">7</span>
+                  <span data-val="8">8</span>
+                  <span data-val="9">9</span>
+                  <span data-val="10">10</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Estilos de baile -->
+          <fieldset class="form-group">
+            <legend class="form-label">Estilo del baile <span class="form-label__hint">(puedes elegir varios)</span></legend>
+            <div class="card-grid card-grid--styles" id="style-grid" role="group" aria-label="Selecciona estilos de baile">
+              <button type="button" class="card-option card-option--style" data-value="elegante" role="checkbox" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </span>
+                <span class="card-option__label">Elegante</span>
+                <span class="card-option__desc">Sofisticado y con clase</span>
+              </button>
+              <button type="button" class="card-option card-option--style" data-value="romantico" role="checkbox" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </span>
+                <span class="card-option__label">Romántico</span>
+                <span class="card-option__desc">Tierno y emotivo</span>
+              </button>
+              <button type="button" class="card-option card-option--style" data-value="dinamico" role="checkbox" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </span>
+                <span class="card-option__label">Dinámico</span>
+                <span class="card-option__desc">Enérgico y con ritmo</span>
+              </button>
+              <button type="button" class="card-option card-option--style" data-value="divertido" role="checkbox" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </span>
+                <span class="card-option__label">Divertido</span>
+                <span class="card-option__desc">Alegre y entretenido</span>
+              </button>
+              <button type="button" class="card-option card-option--style" data-value="sorpresa" role="checkbox" aria-checked="false">
+                <span class="card-option__icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m6.8 15-3.5 2"/><path d="m20.7 17-3.5-2"/><path d="M9 22h6"/><path d="M12 6a6 6 0 0 0-6 6c0 4 6 8 6 8s6-4 6-8a6 6 0 0 0-6-6z"/></svg>
+                </span>
+                <span class="card-option__label">Sorpresa</span>
+                <span class="card-option__desc">Efecto wow inesperado</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Referencias adicionales -->
+          <div class="form-group">
+            <label for="style-references" class="form-label">Referencias adicionales <span class="form-label__hint">(opcional)</span></label>
+            <textarea id="style-references" class="form-input form-textarea" placeholder="Ej: Nos gustaría algo parecido al vals de la película X, o combinar lento y rápido..." rows="3" maxlength="500"></textarea>
+            <span class="form-hint">Comparte videos, ideas o estilos que te inspiren</span>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost step__btn-prev" data-action="prev">
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="button" class="btn btn--primary step__btn-next" data-action="next">
+            Siguiente
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paso 4: Experiencia Previa -->
+    <section id="step-4" class="screen step" data-step="4" aria-label="Experiencia previa">
+      <div class="step__container container">
+        <div class="step__body">
+          <h2 class="step__title">Tu <em>experiencia</em></h2>
+          <p class="step__description">Cuéntanos sobre tu nivel de baile para adaptar la coreografía perfectamente a ustedes.</p>
+
+          <!-- Nivel de experiencia -->
+          <fieldset class="form-group" id="experience-group">
+            <legend class="form-label">¿Cómo describen su nivel de baile?</legend>
+            <div class="experience-grid" id="experience-grid" role="radiogroup" aria-label="Selecciona tu nivel de experiencia">
+
+              <button type="button" class="exp-card" data-value="principiantes" role="radio" aria-checked="false">
+                <span class="exp-card__icon" aria-hidden="true">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="7" r="3"/><path d="M9 13a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6z"/>
+                    <circle cx="17" cy="7" r="3"/><path d="M21 19a6 6 0 0 0-4-5.65"/>
+                  </svg>
+                </span>
+                <span class="exp-card__content">
+                  <span class="exp-card__title">Ambos somos principiantes</span>
+                  <span class="exp-card__desc">No tenemos experiencia en baile, partimos desde cero</span>
+                </span>
+                <span class="exp-card__check" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </button>
+
+              <button type="button" class="exp-card" data-value="mixto" role="radio" aria-checked="false">
+                <span class="exp-card__icon" aria-hidden="true">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="7" r="3"/><path d="M8 13a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6z"/>
+                    <path d="M18 4l-1 6 3-2 3 2-1-6"/><path d="M20 16v5"/><path d="M18 21h4"/>
+                  </svg>
+                </span>
+                <span class="exp-card__content">
+                  <span class="exp-card__title">Uno de nosotros tiene experiencia</span>
+                  <span class="exp-card__desc">Uno ha tomado clases o tiene práctica previa en algún estilo</span>
+                </span>
+                <span class="exp-card__check" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </button>
+
+              <button type="button" class="exp-card" data-value="avanzado" role="radio" aria-checked="false">
+                <span class="exp-card__icon" aria-hidden="true">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </span>
+                <span class="exp-card__content">
+                  <span class="exp-card__title">Ambos bailamos</span>
+                  <span class="exp-card__desc">Los dos tenemos experiencia y nos sentimos cómodos bailando</span>
+                </span>
+                <span class="exp-card__check" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </button>
+
+            </div>
+          </fieldset>
+
+          <!-- Detalles adicionales (condicional) -->
+          <div class="form-group exp-details" id="experience-details-wrapper">
+            <label for="experience-details" class="form-label">Cuéntanos más <span class="form-label__hint">(opcional)</span></label>
+            <textarea id="experience-details" class="form-input form-textarea" placeholder="Ej: Tomé clases de salsa hace 2 años, he bailado vals en otras bodas..." rows="3" maxlength="500"></textarea>
+            <span class="form-hint">Cualquier detalle nos ayuda a preparar mejor tu coreografía</span>
+          </div>
+        </div>
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost step__btn-prev" data-action="prev">
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="button" class="btn btn--primary step__btn-next" data-action="next">
+            Siguiente
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paso 5: Confirmación -->
+    <section id="step-5" class="screen step" data-step="5" aria-label="Confirmación y resumen">
+      <div class="step__container container">
+        <div class="step__body">
+          <h2 class="step__title">Confirma tu <em>proyecto</em></h2>
+          <p class="step__description">Revisa que toda la información sea correcta antes de generar tu documento.</p>
+
+          <!-- Resumen dinámico -->
+          <div class="summary" id="summary">
+
+            <!-- Card 1: Evento -->
+            <div class="summary-card">
+              <div class="summary-card__header">
+                <div class="summary-card__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <h3 class="summary-card__title">Tu Evento</h3>
+                <button type="button" class="summary-card__edit" data-edit-step="1" aria-label="Editar información del evento">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Editar
+                </button>
+              </div>
+              <div class="summary-card__body">
+                <div class="summary-row">
+                  <span class="summary-row__label">Tipo de evento</span>
+                  <span class="summary-row__value" id="sum-event-type">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-row__label">Protagonistas</span>
+                  <span class="summary-row__value" id="sum-names">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-row__label">Fecha</span>
+                  <span class="summary-row__value" id="sum-date">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Música -->
+            <div class="summary-card">
+              <div class="summary-card__header">
+                <div class="summary-card__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </div>
+                <h3 class="summary-card__title">La Música</h3>
+                <button type="button" class="summary-card__edit" data-edit-step="2" aria-label="Editar selección musical">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Editar
+                </button>
+              </div>
+              <div class="summary-card__body" id="sum-music-body">
+                <!-- Contenido dinámico -->
+              </div>
+            </div>
+
+            <!-- Card 3: Duración y Estilo -->
+            <div class="summary-card">
+              <div class="summary-card__header">
+                <div class="summary-card__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3 class="summary-card__title">Duración y Estilo</h3>
+                <button type="button" class="summary-card__edit" data-edit-step="3" aria-label="Editar duración y estilo">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Editar
+                </button>
+              </div>
+              <div class="summary-card__body">
+                <div class="summary-row">
+                  <span class="summary-row__label">Duración</span>
+                  <span class="summary-row__value" id="sum-duration">—</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-row__label">Estilos</span>
+                  <span class="summary-row__value" id="sum-styles">—</span>
+                </div>
+                <div class="summary-row summary-row--references" id="sum-references-row">
+                  <span class="summary-row__label">Referencias</span>
+                  <span class="summary-row__value summary-row__value--block" id="sum-references">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Experiencia -->
+            <div class="summary-card">
+              <div class="summary-card__header">
+                <div class="summary-card__icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3 class="summary-card__title">Tu Experiencia</h3>
+                <button type="button" class="summary-card__edit" data-edit-step="4" aria-label="Editar experiencia">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Editar
+                </button>
+              </div>
+              <div class="summary-card__body">
+                <div class="summary-row">
+                  <span class="summary-row__label">Nivel</span>
+                  <span class="summary-row__value" id="sum-experience">—</span>
+                </div>
+                <div class="summary-row summary-row--details" id="sum-exp-details-row">
+                  <span class="summary-row__label">Detalles</span>
+                  <span class="summary-row__value summary-row__value--block" id="sum-exp-details">—</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="step__nav step__nav--confirm">
+          <button type="button" class="btn btn--ghost step__btn-prev" data-action="prev">
+            <svg class="btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Atrás
+          </button>
+          <button type="button" class="btn btn--primary btn--generate" data-action="generate">
+            <svg class="btn__icon btn__icon--left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Generar mi Documento
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pantalla de Generación -->
+    <section id="generating" class="screen" aria-label="Generando documento">
+      <div class="generating">
+        <div class="generating__animation" aria-hidden="true">
+          <div class="generating__circle">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div class="generating__spinner-ring"></div>
+        </div>
+        <h2 class="generating__title">Generando tu documento</h2>
+        <p class="generating__text">Preparando el brief con toda tu información...</p>
+      </div>
+    </section>
+
+    <!-- Pantalla Final -->
+    <section id="finish" class="screen" aria-label="Descarga y envío">
+      <div class="finish container">
+        <div class="finish__icon" aria-hidden="true">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+
+        <h2 class="finish__title">¡Tu brief está <em>listo</em>!</h2>
+        <p class="finish__subtitle">Descarga el PDF y envíalo a Fernando por WhatsApp para recibir tu cotización.</p>
+
+        <div class="finish__actions">
+          <button type="button" id="btn-download" class="btn btn--primary btn--download">
+            <svg class="btn__icon btn__icon--left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar PDF
+          </button>
+
+          <button type="button" id="btn-whatsapp" class="btn btn--whatsapp">
+            <svg class="btn__icon btn__icon--left" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+            </svg>
+            Abrir WhatsApp
+          </button>
+        </div>
+
+        <div class="finish__instructions">
+          <div class="finish__instructions-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+          </div>
+          <div class="finish__instructions-content">
+            <p class="finish__instructions-title">¿Cómo enviar el PDF?</p>
+            <ol class="finish__instructions-list">
+              <li>Descarga el PDF con el botón de arriba</li>
+              <li>Abre WhatsApp (se abrirá con un mensaje predefinido)</li>
+              <li>Adjunta el PDF manualmente al chat</li>
+              <li>¡Envía y espera la propuesta de Fernando!</li>
+            </ol>
+          </div>
+        </div>
+
+        <button type="button" id="btn-new-project" class="btn btn--ghost finish__new-project">
+          <svg class="btn__icon btn__icon--left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+          Crear otro proyecto
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Librerías externas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Scripts del proyecto -->
+  <script src="js/form-data.js"></script>
+  <script src="js/spotify-service.js"></script>
+  <script src="js/steps-manager.js"></script>
+  <script src="js/pdf-generator.js"></script>
+  <script src="js/whatsapp-sender.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

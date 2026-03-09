@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Animations CSS - Keyframes y clases de animación
+   ========================================================================== */
+
+/* =================================================================
+   KEYFRAMES
+   ================================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(10px, -20px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-5px, -35px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(15px, -15px);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
+}
+
+/* Transiciones entre pasos */
+@keyframes stepExitLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes stepExitRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+/* =================================================================
+   CLASES DE ANIMACIÓN - Entrada con stagger via --delay
+   ================================================================= */
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn var(--duration-entrance) var(--ease-elegant) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp var(--duration-slower) var(--ease-elegant) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* =================================================================
+   GENERATING SCREEN ANIMATIONS
+   ================================================================= */
+
+@keyframes generatingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes spinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes checkScale {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

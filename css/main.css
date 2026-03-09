@@ -1,0 +1,373 @@
+/* ==========================================================================
+   Main CSS - Estilos generales y pantalla de bienvenida
+   ========================================================================== */
+
+/* =================================================================
+   BASE
+   ================================================================= */
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  overflow-x: hidden;
+}
+
+/* ---- Screens ---- */
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* ---- Contenedor reutilizable ---- */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* ---- Botón primario ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-family: var(--font-body);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    background-color var(--transition-fast);
+}
+
+.btn--primary {
+  padding: var(--space-4) var(--space-8);
+  color: var(--color-text-inverse);
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-button);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn__icon {
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.btn--primary:hover .btn__icon {
+  transform: translateX(4px);
+}
+
+/* =================================================================
+   HERO / BIENVENIDA
+   ================================================================= */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--space-6) var(--space-5);
+  overflow: hidden;
+}
+
+/* ---- Background ---- */
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(201, 169, 110, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(44, 62, 107, 0.08) 0%, transparent 50%),
+    var(--gradient-hero);
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.008) 2px,
+    rgba(255, 255, 255, 0.008) 4px
+  );
+}
+
+/* Partículas decorativas flotantes */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero__particles span {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.3);
+  animation: float-particle 8s infinite ease-in-out;
+}
+
+.hero__particles span:nth-child(1) {
+  top: 20%;
+  left: 15%;
+  animation-delay: 0s;
+  animation-duration: 7s;
+}
+
+.hero__particles span:nth-child(2) {
+  top: 60%;
+  right: 20%;
+  width: 2px;
+  height: 2px;
+  animation-delay: -3s;
+  animation-duration: 9s;
+}
+
+.hero__particles span:nth-child(3) {
+  bottom: 30%;
+  left: 60%;
+  width: 2px;
+  height: 2px;
+  background: rgba(201, 169, 110, 0.2);
+  animation-delay: -5s;
+  animation-duration: 11s;
+}
+
+/* ---- Content ---- */
+
+.hero__content {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: var(--container-max);
+  text-align: center;
+}
+
+/* ---- Badge ---- */
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-6);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-accent-light);
+  background: rgba(201, 169, 110, 0.08);
+  border: 1px solid rgba(201, 169, 110, 0.15);
+  border-radius: var(--radius-full);
+}
+
+.hero__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+/* ---- Título ---- */
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  color: var(--color-white);
+  margin-bottom: var(--space-4);
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+/* ---- Subtítulo ---- */
+
+.hero__subtitle {
+  font-size: var(--text-md);
+  font-weight: var(--font-light);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-10);
+  max-width: 480px;
+}
+
+/* ---- Mensaje de Fernando ---- */
+
+.hero__message {
+  width: 100%;
+  max-width: 560px;
+  padding: var(--space-6);
+  margin-bottom: var(--space-10);
+  text-align: left;
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hero__message-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-inverse);
+  background: var(--gradient-accent);
+  border-radius: 50%;
+}
+
+.hero__author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero__author-name {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-white);
+}
+
+.hero__author-title {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--tracking-wide);
+}
+
+.hero__quote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.hero__quote p {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.hero__quote strong {
+  color: var(--color-accent-light);
+  font-weight: var(--font-semibold);
+}
+
+.hero__location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.hero__location-icon {
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+/* ---- CTA ---- */
+
+.hero__cta {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-md);
+  padding: var(--space-5) var(--space-10);
+}
+
+/* ---- Footer ---- */
+
+.hero__footer {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* =================================================================
+   HERO RESPONSIVE
+   ================================================================= */
+
+@media (min-width: 480px) {
+  .hero {
+    padding: var(--space-10) var(--space-6);
+  }
+
+  .hero__badge {
+    font-size: var(--text-sm);
+  }
+
+  .hero__message {
+    padding: var(--space-8);
+  }
+
+  .hero__quote p {
+    font-size: var(--text-base);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero__title {
+    font-size: var(--text-5xl);
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-lg);
+  }
+
+  .hero__message {
+    padding: var(--space-8) var(--space-10);
+  }
+}
