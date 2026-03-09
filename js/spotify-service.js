@@ -1,74 +1,24 @@
 /* ==========================================================================
-   Spotify Service - Integración con Spotify Web API
-   Usa Client Credentials Flow (no requiere login del usuario)
+   Music Service - Integración con iTunes Search API (Apple Music)
+   Sin autenticación requerida, CORS habilitado, previews de 30 seg.
+   Mantiene la misma interfaz pública que el servicio anterior de Spotify.
    ========================================================================== */
 
 const SpotifyService = (() => {
   'use strict';
 
   // ---- Configuración ----
-  // Reemplazar con credenciales reales de https://developer.spotify.com/dashboard
   const CONFIG = {
-    clientId: '46a19bf191434e19a09e50a68647b6f5',
-    clientSecret: '6737778457a94a2cbf3aff3335e95630',
-    market: 'MX',
-    tokenUrl: 'https://accounts.spotify.com/api/token',
-    apiBase: 'https://api.spotify.com/v1'
+    apiBase: 'https://itunes.apple.com/search',
+    country: 'MX',
+    media: 'music',
+    entity: 'song'
   };
-
-  // ---- Estado interno ----
-  let accessToken = '';
-  let tokenExpiry = 0;
 
   // Caché de búsquedas: query → { results, timestamp }
   const searchCache = new Map();
   const CACHE_TTL = 5 * 60 * 1000; // 5 minutos
   const CACHE_MAX_SIZE = 50;
-
-  // ---- Autenticación (Client Credentials) ----
-
-  async function authenticate() {
-    // Si el token aún es válido, reutilizar
-    if (accessToken && Date.now() < tokenExpiry) {
-      return accessToken;
-    }
-
-    if (!CONFIG.clientId || !CONFIG.clientSecret) {
-      throw new SpotifyError(
-        'CONFIG_MISSING',
-        'Las credenciales de Spotify no están configuradas. Configura clientId y clientSecret en spotify-service.js'
-      );
-    }
-
-    const credentials = btoa(`${CONFIG.clientId}:${CONFIG.clientSecret}`);
-
-    const response = await fetch(CONFIG.tokenUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${credentials}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials'
-    });
-
-    if (!response.ok) {
-      throw new SpotifyError(
-        'AUTH_FAILED',
-        'No se pudo autenticar con Spotify. Verifica las credenciales.'
-      );
-    }
-
-    const data = await response.json();
-    accessToken = data.access_token;
-    // Expirar 60 seg antes para margen de seguridad
-    tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
-
-    return accessToken;
-  }
-
-  function isConfigured() {
-    return !!(CONFIG.clientId && CONFIG.clientSecret);
-  }
 
   // ---- Búsqueda de canciones ----
 
@@ -83,31 +33,30 @@ const SpotifyService = (() => {
       return cached.results;
     }
 
-    const token = await authenticate();
     const params = new URLSearchParams({
-      q: trimmed,
-      type: 'track',
-      market: CONFIG.market,
+      term: trimmed,
+      country: CONFIG.country,
+      media: CONFIG.media,
+      entity: CONFIG.entity,
       limit: String(limit)
     });
 
-    const response = await fetchWithRetry(
-      `${CONFIG.apiBase}/search?${params}`,
-      {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }
-    );
+    let response;
+    try {
+      response = await fetch(`${CONFIG.apiBase}?${params}`);
+    } catch {
+      throw new SpotifyError('NETWORK_ERROR', 'Sin conexión a internet. Verifica tu red e intenta de nuevo.');
+    }
 
     if (!response.ok) {
-      handleApiError(response);
+      throw new SpotifyError('API_ERROR', `Error de búsqueda (${response.status}). Intenta de nuevo.`);
     }
 
     const data = await response.json();
-    const results = (data.tracks?.items || []).map(normalizeTrack);
+    const results = (data.results || []).map(normalizeTrack);
 
     // Guardar en caché
     if (searchCache.size >= CACHE_MAX_SIZE) {
-      // Eliminar la entrada más antigua
       const oldestKey = searchCache.keys().next().value;
       searchCache.delete(oldestKey);
     }
@@ -116,7 +65,7 @@ const SpotifyService = (() => {
     return results;
   }
 
-  // ---- Obtener detalles de un track (incluye preview_url) ----
+  // ---- Obtener detalles de un track por ID (trackId = iTunes trackId numérico) ----
 
   async function getTrack(trackId) {
     if (!trackId) return null;
@@ -127,43 +76,46 @@ const SpotifyService = (() => {
       return cached.results;
     }
 
-    const token = await authenticate();
-    const params = new URLSearchParams({ market: CONFIG.market });
-
-    const response = await fetchWithRetry(
-      `${CONFIG.apiBase}/tracks/${trackId}?${params}`,
-      {
-        headers: { 'Authorization': `Bearer ${token}` }
-      }
-    );
+    let response;
+    try {
+      const params = new URLSearchParams({
+        id: String(trackId),
+        country: CONFIG.country
+      });
+      response = await fetch(`https://itunes.apple.com/lookup?${params}`);
+    } catch {
+      throw new SpotifyError('NETWORK_ERROR', 'Sin conexión a internet. Verifica tu red e intenta de nuevo.');
+    }
 
     if (!response.ok) {
-      handleApiError(response);
+      throw new SpotifyError('API_ERROR', `Error al obtener canción (${response.status}).`);
     }
 
     const data = await response.json();
-    const track = normalizeTrack(data);
+    if (!data.results?.length) return null;
 
+    const track = normalizeTrack(data.results[0]);
     searchCache.set(cacheKey, { results: track, timestamp: Date.now() });
 
     return track;
   }
 
-  // ---- Normalizar datos de un track ----
+  // ---- Normalizar datos de un track (misma forma que antes) ----
 
-  function normalizeTrack(track) {
+  function normalizeTrack(item) {
+    // iTunes devuelve artworkUrl100; lo escalamos a 300x300
+    const albumImage = (item.artworkUrl100 || '').replace('100x100', '300x300');
+
     return {
-      id: track.id,
-      name: track.name,
-      artist: (track.artists || []).map((a) => a.name).join(', '),
-      album: track.album?.name || '',
-      albumImage: track.album?.images?.[1]?.url  // 300x300
-                || track.album?.images?.[0]?.url  // fallback mayor
-                || '',
-      previewUrl: track.preview_url || null,
-      duration: track.duration_ms || 0,
-      spotifyUrl: track.external_urls?.spotify || '',
-      uri: track.uri || ''
+      id: String(item.trackId || ''),
+      name: item.trackName || '',
+      artist: item.artistName || '',
+      album: item.collectionName || '',
+      albumImage,
+      previewUrl: item.previewUrl || null,
+      duration: item.trackTimeMillis || 0,
+      spotifyUrl: item.trackViewUrl || '',  // enlace a Apple Music
+      uri: `itunes:track:${item.trackId || ''}`
     };
   }
 
@@ -177,54 +129,13 @@ const SpotifyService = (() => {
     return `${min}:${String(sec).padStart(2, '0')}`;
   }
 
-  // ---- Fetch con retry (1 reintento en 429 / 5xx) ----
+  // ---- isConfigured: siempre true (no se necesitan credenciales) ----
 
-  async function fetchWithRetry(url, options, retries = 1) {
-    let response;
-    try {
-      response = await fetch(url, options);
-    } catch {
-      throw new SpotifyError('NETWORK_ERROR', 'Sin conexión a internet. Verifica tu red e intenta de nuevo.');
-    }
-
-    // Rate limit: esperar y reintentar
-    if (response.status === 429 && retries > 0) {
-      const retryAfter = parseInt(response.headers.get('Retry-After') || '2', 10);
-      await delay(retryAfter * 1000);
-      return fetchWithRetry(url, options, retries - 1);
-    }
-
-    // Error de servidor: reintentar una vez
-    if (response.status >= 500 && retries > 0) {
-      await delay(1000);
-      return fetchWithRetry(url, options, retries - 1);
-    }
-
-    return response;
+  function isConfigured() {
+    return true;
   }
 
-  // ---- Manejo de errores de la API ----
-
-  function handleApiError(response) {
-    if (response.status === 401) {
-      // Token expirado, limpiar para forzar re-auth
-      accessToken = '';
-      tokenExpiry = 0;
-      throw new SpotifyError('TOKEN_EXPIRED', 'Sesión de Spotify expirada. Intenta buscar de nuevo.');
-    }
-
-    if (response.status === 429) {
-      throw new SpotifyError('RATE_LIMIT', 'Demasiadas búsquedas. Espera unos segundos e intenta de nuevo.');
-    }
-
-    if (response.status >= 500) {
-      throw new SpotifyError('SERVER_ERROR', 'Spotify no está disponible en este momento. Intenta más tarde.');
-    }
-
-    throw new SpotifyError('API_ERROR', `Error de Spotify (${response.status}). Intenta de nuevo.`);
-  }
-
-  // ---- Error personalizado ----
+  // ---- Error personalizado (mantiene el mismo nombre para compatibilidad) ----
 
   class SpotifyError extends Error {
     constructor(code, message) {
@@ -234,17 +145,11 @@ const SpotifyService = (() => {
     }
   }
 
-  // ---- Utilidades ----
-
-  function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   function clearCache() {
     searchCache.clear();
   }
 
-  // ---- API pública ----
+  // ---- API pública (idéntica a la anterior) ----
 
   return {
     search,

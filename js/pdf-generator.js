@@ -254,14 +254,14 @@ const PDFGenerator = (() => {
       doc.text(truncate(doc, sanitize(song.artist), maxWidth), valueX, y);
       y += 4;
 
-      // Enlace a Spotify (solo si doc.link existe)
+      // Enlace a Apple Music (solo si doc.link existe)
       if (song.spotifyUrl && typeof doc.link === 'function') {
         try {
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(7.5);
           doc.setTextColor(...C.gold);
-          doc.text('Abrir en Spotify', valueX, y);
-          const linkWidth = doc.getTextWidth('Abrir en Spotify');
+          doc.text('Abrir en Apple Music', valueX, y);
+          const linkWidth = doc.getTextWidth('Abrir en Apple Music');
           doc.link(valueX, y - 3, linkWidth, 4, { url: song.spotifyUrl });
           y += 5;
         } catch {

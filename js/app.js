@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearResults();
 
       if (!SpotifyService.isConfigured()) {
-        showStatus('Spotify no está configurado. Usa la opción de abajo para que Fernando sugiera la música.', true);
+        showStatus('Búsqueda no disponible. Usa la opción de abajo para que Fernando sugiera la música.', true);
         showSpinner(false);
         return;
       }
@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (songs.length > 0) {
         searchHint.textContent = `${songs.length} de ${MAX_SONGS} canciones · Puedes agregar ${remaining} más`;
       } else {
-        searchHint.textContent = 'Escribe para buscar en Spotify';
+        searchHint.textContent = 'Escribe para buscar canciones';
       }
     }
 
